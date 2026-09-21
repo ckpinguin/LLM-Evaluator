@@ -35,7 +35,7 @@ class EvaluationResult(BaseModel):
     scores: dict[str, float]  # all metrics the evaluator returned
     examples: int
     duration_seconds: float  # time for this evaluator, download excluded
-    device: str  # "mps" or "cpu"
+    device: str  # "cuda", "mps", or "cpu"
     testbed_version: str
 
 

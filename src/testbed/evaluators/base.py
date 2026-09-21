@@ -26,7 +26,7 @@ class EvaluatorOutput:
 #   run(model_dir, entry, device, limit) -> EvaluatorOutput
 # - model_dir: folder with the downloaded model files
 # - entry:     the catalog entry (classification evaluators need its label_map)
-# - device:    "mps" (Apple GPU) or "cpu"
+# - device:    "cuda" (NVIDIA GPU), "mps" (Apple GPU), or "cpu"
 # - limit:     how many examples to use (ignored when supports_limit is False)
 RunFunction = Callable[[Path, CatalogEntry, str, int], EvaluatorOutput]
 

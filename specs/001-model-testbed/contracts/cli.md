@@ -27,7 +27,7 @@ whether `--limit` applies. The default evaluator per type is marked with `*`.
 
 ---
 
-## `testbed evaluate [MODEL] [--evaluator EVALUATOR]... [--limit N] [--device auto|mps|cpu]`
+## `testbed evaluate [MODEL] [--evaluator EVALUATOR]... [--limit N] [--device auto|cuda|mps|cpu]`
 
 Runs an evaluation (US1, US2).
 
@@ -36,7 +36,7 @@ Runs an evaluation (US1, US2).
 | `MODEL` | ask | If omitted, ask for the type, then show a numbered model list to choose from |
 | `--evaluator`, `-e` | default of the model's type | Repeat to run several evaluators in one run (FR-016) |
 | `--limit` | 200 | Sample size for evaluators that support it (FR-017) |
-| `--device` | `auto` | `auto` = `mps` if available, else `cpu` (FR-021) |
+| `--device` | `auto` | `auto` = `cuda` if available, else `mps`, else `cpu` (FR-021) |
 
 Behavior:
 

@@ -40,7 +40,7 @@ from testbed.results import compare as compare_results
 from testbed.runner import EvaluationRun, RunStatus, check_evaluators, run_evaluation
 
 app = typer.Typer(
-    help="Try out Hugging Face text models on your Mac: pick a model, pick an evaluator, "
+    help="Try out Hugging Face text models on your computer: pick a model, pick an evaluator, "
     "get a score. Models are deleted again after each run.",
     no_args_is_help=True,
     add_completion=False,
@@ -52,6 +52,7 @@ class DeviceChoice(StrEnum):
     """Allowed values for the --device option."""
 
     AUTO = "auto"
+    CUDA = "cuda"
     MPS = "mps"
     CPU = "cpu"
 
@@ -215,7 +216,7 @@ def main(
         typer.Option("--version", help="Show the version and exit.", callback=_show_version),
     ] = False,
 ) -> None:
-    """Try out Hugging Face text models on your Mac."""
+    """Try out Hugging Face text models on your computer."""
 
 
 @app.command()
@@ -264,7 +265,8 @@ def evaluate(
         int, typer.Option(min=1, help="Number of examples per evaluator.")
     ] = settings.DEFAULT_LIMIT,
     device: Annotated[
-        DeviceChoice, typer.Option(help="Where to run: auto = Apple GPU if available.")
+        DeviceChoice,
+        typer.Option(help="Where to run. auto = NVIDIA GPU, else Apple GPU, else CPU."),
     ] = DeviceChoice.AUTO,
 ) -> None:
     """Download a model, evaluate it, show the scores, and delete the model again."""

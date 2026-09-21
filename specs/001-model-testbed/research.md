@@ -20,8 +20,11 @@ considered. Versions were resolved with `uv pip compile` for Python 3.12 on Appl
 
 ## 2. Machine-learning runtime on the Mac mini
 
-- **Decision**: PyTorch (2.11) with the Apple GPU backend (`mps`), automatic CPU fallback, models
-  loaded in `float32`, and `PYTORCH_ENABLE_MPS_FALLBACK=1` set before PyTorch is imported.
+- **Decision**: PyTorch (2.14) with automatic device choice: an NVIDIA GPU (`cuda`) if
+  `torch.cuda.is_available()`, else the Apple GPU backend (`mps`), else the CPU. Models are
+  loaded in `float32`, and `PYTORCH_ENABLE_MPS_FALLBACK=1` is set before PyTorch is imported.
+  (CUDA support was added after the first implementation; the standard Linux PyTorch wheels
+  already include CUDA, so no extra dependency is needed. Windows needs PyTorch's CUDA index.)
 - **Rationale**: PyTorch is the only mainstream framework that Hugging Face Transformers,
   Sentence Transformers, and lm-evaluation-harness all support fully on Apple GPUs. `float32` is
   the most reliable precision on `mps` (half precision can overflow for some models) and makes

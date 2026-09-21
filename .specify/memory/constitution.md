@@ -56,7 +56,7 @@ over brevity or cleverness.
 
 - Every module, class, and non-trivial function MUST have a docstring/header comment stating its
   purpose, inputs, and outputs.
-- Comments MUST explain *why* something is done and clarify any non-obvious step (e.g., a
+- Comments MUST explain _why_ something is done and clarify any non-obvious step (e.g., a
   formula, a data transformation, or a library call whose effect is not self-evident).
 - Comments MUST be kept accurate; outdated comments are treated as defects.
 - Trivial comments that merely restate the code SHOULD be avoided.

@@ -12,6 +12,9 @@
 
 - Q: Which user interface should the testbed have? → A: Both, terminal first: a command-line tool
   now, with a simple local web page added later on top of the same core.
+- Q (added after implementation): Should the testbed also use NVIDIA GPUs? → A: Yes. Detect the
+  platform automatically: CUDA if available, else MPS, else CPU. The Mac mini stays the main
+  target; CUDA must never be required.
 
 **Input**: User description: "This will be a testbed software for different models (generative,
 embedding, classification). The models should be selectable from a curated list, that you can
@@ -195,8 +198,9 @@ history, and confirm both results appear side by side with their scores.
 
 #### Platform and usability
 
-- **FR-021**: System MUST run on an Apple silicon Mac mini, use Apple GPU acceleration (MPS) when
-  available, fall back to CPU automatically, and MUST NOT require NVIDIA/CUDA hardware.
+- **FR-021**: System MUST run on an Apple silicon Mac mini and MUST automatically use the best
+  available hardware: an NVIDIA GPU (CUDA) if present, otherwise Apple GPU acceleration (MPS),
+  otherwise the CPU. It MUST NOT require NVIDIA/CUDA hardware.
 - **FR-022**: Users MUST be able to perform every action in this specification (browse catalog,
   regenerate catalog, run evaluations, view and compare history) through a command-line tool in
   the terminal. The core features MUST be usable independently of the terminal interface so that a

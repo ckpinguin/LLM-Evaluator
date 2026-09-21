@@ -1,13 +1,17 @@
 # Model Testbed
 
 A small, beginner-friendly testbed for trying out Hugging Face text models (generative,
-embedding, and classification) on an Apple silicon Mac. Pick a model from a curated catalog,
+embedding, and classification) on a Mac or PC. Pick a model from a curated catalog,
 pick an evaluator, and get a score with a plain-language explanation. Models are downloaded only
 for the run and deleted right afterwards, so your disk stays clean.
 
 ## Requirements
 
-- An Apple silicon Mac (e.g., Mac mini) with at least 16 GB of memory
+- A computer with at least 16 GB of memory. The testbed automatically uses the fastest
+  hardware it finds:
+  - an **NVIDIA GPU** (`cuda`), e.g. on a Linux PC,
+  - else the **Apple GPU** (`mps`) of an Apple silicon Mac, e.g. a Mac mini,
+  - else the **CPU** (works everywhere, but slower).
 - [uv](https://docs.astral.sh/uv/) (Python project manager)
 - An internet connection and a few GB of free disk space
 
@@ -47,7 +51,7 @@ Cleaned up 91 MB of downloads.
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `uv run testbed models [--type TYPE]`                                                     | List the catalog. Nothing is downloaded.                                                                                              |
 | `uv run testbed evaluators [--type TYPE]`                                                 | List evaluators: what they measure and how to read the score. `*` marks the recommended one per type.                                 |
-| `uv run testbed evaluate [MODEL] [-e EVALUATOR]... [--limit N] [--device auto\|mps\|cpu]` | Download the model, run the evaluator(s), show and save the scores, delete the model. Without `MODEL` you choose from numbered lists. |
+| `uv run testbed evaluate [MODEL] [-e EVALUATOR]... [--limit N] [--device auto\|cuda\|mps\|cpu]` | Download the model, run the evaluator(s), show and save the scores, delete the model. Without `MODEL` you choose from numbered lists. |
 | `uv run testbed history [--type TYPE] [--evaluator KEY] [--model MODEL]`                  | Show saved results, newest first.                                                                                                     |
 | `uv run testbed compare EVALUATOR`                                                        | Latest result of every model on one evaluator, best first.                                                                            |
 | `uv run testbed catalog build [--per-type N] [--max-size-gb X] [--output PATH]`           | Regenerate the catalog from Hugging Face.                                                                                             |
@@ -169,10 +173,17 @@ prints). The design documents are in `specs/001-model-testbed/`.
 
 - **"Not enough free disk space"**: free some space or pick a smaller model. The message says
   how much is needed.
-- **Slow run / "Device: cpu"**: the Apple GPU was not available. Operations the GPU does not
-  support fall back to the CPU automatically; this is slower but works.
+- **Slow run / "Device: cpu"**: no usable GPU was found. On a Mac, operations the Apple GPU
+  does not support also fall back to the CPU automatically; this is slower but works.
+- **NVIDIA GPU not used**: check that `nvidia-smi` works and that
+  `uv run python -c "import torch; print(torch.cuda.is_available())"` prints `True`. On Linux
+  the standard PyTorch package includes CUDA support. On Windows, PyTorch from the default
+  package index has no CUDA support; see the
+  [PyTorch with uv guide](https://docs.astral.sh/uv/guides/integration/pytorch/) to switch to a
+  CUDA build.
 - **"The model did not fit into memory"**: choose a smaller model or close other programs.
-  Models up to about 1 billion parameters work on a 16 GB Mac.
+  Models up to about 1 billion parameters work with 16 GB of memory (on an NVIDIA GPU, the
+  GPU's own memory counts).
 - **"Warning: You are sending unauthenticated requests to the HF Hub"**: harmless. The testbed
   only uses public models; setting a Hugging Face token (`HF_TOKEN`) only raises download
   rate limits.

@@ -79,7 +79,7 @@ One execution: one model and one or more evaluators (FR-016).
 | `model` | CatalogEntry | The selected model |
 | `evaluators` | list of Evaluator | All compatible with `model`; at least one |
 | `limit` | number | Sample size; default 200 |
-| `device` | text | `mps` or `cpu` |
+| `device` | text | `cuda`, `mps`, or `cpu` |
 | `status` | RunStatus | See state diagram |
 | `results` | list of EvaluationResult | One per evaluator that finished |
 | `errors` | map evaluator key → text | Evaluators that failed, with a plain-language message |
@@ -119,7 +119,7 @@ The outcome of one evaluator in one run (FR-018, FR-019).
 | `scores` | map text → number | All metrics returned by the evaluator |
 | `examples` | number | Number of examples actually evaluated |
 | `duration_seconds` | number | Time for this evaluator (download excluded) |
-| `device` | text | `mps` or `cpu` |
+| `device` | text | `cuda`, `mps`, or `cpu` |
 | `testbed_version` | text | Version of the testbed that produced the result |
 
 **Comparison rule (FR-020)**: results are compared only within the same `evaluator`. For each

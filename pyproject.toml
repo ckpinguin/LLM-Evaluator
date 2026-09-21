@@ -7,7 +7,7 @@ requires-python = ">=3.12,<3.13"
 # Each dependency is the standard tool for its job (see specs/001-model-testbed/research.md).
 # Lower bounds = versions tested; upper bounds = next major version. uv.lock pins exact versions.
 dependencies = [
-    "torch>=2.14,<3",                     # runs the models (Apple GPU via "mps")
+    "torch>=2.14,<3",                     # runs the models (on cuda, mps, or cpu)
     "transformers>=5.17,<6",              # loads generative and classification models
     "sentence-transformers>=6.1,<7",      # loads and evaluates embedding models
     "huggingface-hub>=1.32,<2",           # searches and downloads models

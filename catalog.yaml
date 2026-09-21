@@ -1,107 +1,131 @@
 # Curated model catalog for the testbed.
 # Edit by hand, or regenerate with:  uv run testbed catalog build
 # Format: specs/001-model-testbed/contracts/catalog-file.md
+#
+# Curated by hand on 2026-09-21 from `testbed catalog build` (most downloaded suitable models):
+# - Removed: intfloat/multilingual-e5-small (expects "query:"/"passage:" prefixes the testbed
+#   does not add), yangheng/deberta-v3-base-absa-v1.1 (needs an extra "aspect" input),
+#   qandos0/SentimentArEng (unknown license), distilbert/distilgpt2 and
+#   paraphrase-multilingual-mpnet-base-v2 (near-duplicates of models that stay).
+# - Added: HuggingFaceTB/SmolLM2-135M, Qwen/Qwen2.5-0.5B (base model, preferred over the
+#   -Instruct version for these benchmarks), BAAI/bge-small-en-v1.5,
+#   tabularisai/robust-sentiment-analysis, Harsha901/tinybert-imdb-sentiment-analysis-model.
+# Every model here was evaluated successfully with the testbed on a Mac mini (mps).
 generated_at: 2026-09-21
 max_size_gb: 2.0
 models:
-- id: Qwen/Qwen3-0.6B
-  type: generative
-  description: Text generation model, 752M parameters.
-  size_mb: 1449
-  license: apache-2.0
-- id: openai-community/gpt2
-  type: generative
-  description: Text generation model, 137M parameters.
-  size_mb: 525
-  license: mit
-- id: Qwen/Qwen2.5-0.5B-Instruct
-  type: generative
-  description: Text generation model, 494M parameters.
-  size_mb: 953
-  license: apache-2.0
-- id: EleutherAI/pythia-160m
-  type: generative
-  description: Text generation model, 213M parameters.
-  size_mb: 360
-  license: apache-2.0
-- id: distilbert/distilgpt2
-  type: generative
-  description: Text generation model, 88M parameters.
-  size_mb: 339
-  license: apache-2.0
-- id: sentence-transformers/all-MiniLM-L6-v2
-  type: embedding
-  description: Sentence embedding model, 23M parameters.
-  size_mb: 87
-  license: apache-2.0
-- id: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
-  type: embedding
-  description: Sentence embedding model, 118M parameters.
-  size_mb: 476
-  license: apache-2.0
-- id: sentence-transformers/all-mpnet-base-v2
-  type: embedding
-  description: Sentence embedding model, 109M parameters.
-  size_mb: 418
-  license: apache-2.0
-- id: intfloat/multilingual-e5-small
-  type: embedding
-  description: Sentence embedding model, 118M parameters.
-  size_mb: 470
-  license: mit
-- id: sentence-transformers/paraphrase-multilingual-mpnet-base-v2
-  type: embedding
-  description: Sentence embedding model, 278M parameters.
-  size_mb: 1074
-  license: apache-2.0
-- id: distilbert/distilbert-base-uncased-finetuned-sst-2-english
-  type: classification
-  description: Sentiment classification model, 67M parameters.
-  size_mb: 256
-  license: apache-2.0
-  task: sentiment
-  label_map:
-    NEGATIVE: negative
-    POSITIVE: positive
-- id: lxyuan/distilbert-base-multilingual-cased-sentiments-student
-  type: classification
-  description: Sentiment classification model, 135M parameters.
-  size_mb: 520
-  license: apache-2.0
-  task: sentiment
-  label_map:
-    positive: positive
-    neutral: neutral
-    negative: negative
-- id: tabularisai/multilingual-sentiment-analysis
-  type: classification
-  description: Sentiment classification model, 135M parameters.
-  size_mb: 520
-  license: cc-by-nc-4.0
-  task: sentiment
-  label_map:
-    Very Negative: negative
-    Negative: negative
-    Neutral: neutral
-    Positive: positive
-    Very Positive: positive
-- id: qandos0/SentimentArEng
-  type: classification
-  description: Sentiment classification model, 278M parameters.
-  size_mb: 1077
-  license: unknown
-  task: sentiment
-  label_map:
-    negative: negative
-    neutral: neutral
-    positive: positive
-- id: yangheng/deberta-v3-base-absa-v1.1
-  type: classification
-  description: Sentiment classification model, 184M parameters.
-  size_mb: 706
-  license: mit
-  task: sentiment
-  label_map:
-    Negative: negative
-    Neutral: neutral
-    Positive: positive
+  # --- generative: smallest first ------------------------------------------------------------
+  - id: HuggingFaceTB/SmolLM2-135M
+    type: generative
+    description: Very small modern language model (135M parameters); a quick first test.
+    size_mb: 260
+    license: apache-2.0
+
+  - id: openai-community/gpt2
+    type: generative
+    description: The classic GPT-2 from 2019 (137M parameters); a historical baseline.
+    size_mb: 525
+    license: mit
+
+  - id: EleutherAI/pythia-160m
+    type: generative
+    description: Small research model trained on the open Pile dataset (213M parameters).
+    size_mb: 360
+    license: apache-2.0
+
+  - id: Qwen/Qwen2.5-0.5B
+    type: generative
+    description: Small multilingual base language model (494M parameters).
+    size_mb: 953
+    license: apache-2.0
+
+  - id: Qwen/Qwen3-0.6B
+    type: generative
+    description: Recent small Qwen3 chat/reasoning model (752M parameters); the largest here.
+    size_mb: 1449
+    license: apache-2.0
+
+  # --- embedding -----------------------------------------------------------------------------
+  - id: sentence-transformers/all-MiniLM-L6-v2
+    type: embedding
+    description: Small, fast English sentence embedding model (23M parameters).
+    size_mb: 87
+    license: apache-2.0
+
+  - id: BAAI/bge-small-en-v1.5
+    type: embedding
+    description: Small English embedding model, strong at search/retrieval (33M parameters).
+    size_mb: 128
+    license: mit
+
+  - id: sentence-transformers/all-mpnet-base-v2
+    type: embedding
+    description: Larger, more accurate English sentence embedding model (109M parameters).
+    size_mb: 418
+    license: apache-2.0
+
+  - id: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+    type: embedding
+    description: Multilingual sentence embedding model for 50+ languages (118M parameters).
+    size_mb: 476
+    license: apache-2.0
+
+  # --- classification (sentiment) ------------------------------------------------------------
+  # Note: the first model was trained on SST-2, so the `sst2` evaluator is "home ground" for
+  # it; `rotten-tomatoes` is the fairer comparison between these models.
+  - id: distilbert/distilbert-base-uncased-finetuned-sst-2-english
+    type: classification
+    task: sentiment
+    label_map:
+      NEGATIVE: negative
+      POSITIVE: positive
+    description: DistilBERT fine-tuned on SST-2 movie-review sentiment (67M parameters).
+    size_mb: 256
+    license: apache-2.0
+
+  - id: Harsha901/tinybert-imdb-sentiment-analysis-model
+    type: classification
+    task: sentiment
+    label_map:
+      negative: negative
+      positive: positive
+    description: Tiny BERT fine-tuned on IMDB movie reviews (14M parameters); very fast.
+    size_mb: 56
+    license: mit
+
+  - id: tabularisai/robust-sentiment-analysis
+    type: classification
+    task: sentiment
+    label_map:
+      Very Negative: negative
+      Negative: negative
+      Neutral: neutral
+      Positive: positive
+      Very Positive: positive
+    description: English DistilBERT with five levels, very negative to very positive (67M).
+    size_mb: 256
+    license: apache-2.0
+
+  - id: lxyuan/distilbert-base-multilingual-cased-sentiments-student
+    type: classification
+    task: sentiment
+    label_map:
+      negative: negative
+      neutral: neutral
+      positive: positive
+    description: Multilingual DistilBERT with negative/neutral/positive labels (135M parameters).
+    size_mb: 520
+    license: apache-2.0
+
+  - id: tabularisai/multilingual-sentiment-analysis
+    type: classification
+    task: sentiment
+    label_map:
+      Very Negative: negative
+      Negative: negative
+      Neutral: neutral
+      Positive: positive
+      Very Positive: positive
+    description: Multilingual DistilBERT with five sentiment levels (135M); non-commercial license.
+    size_mb: 520
+    license: cc-by-nc-4.0

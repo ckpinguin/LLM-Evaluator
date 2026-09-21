@@ -24,7 +24,7 @@ def run_lm_eval(task: str, model_dir: Path, device: str, limit: int) -> Evaluato
         model="hf",  # a Hugging Face Transformers model
         model_args={
             "pretrained": str(model_dir),  # load from our download folder, not from the Hub
-            "dtype": "float32",  # the most reliable precision on the Apple GPU
+            "dtype": "float32",  # the most reliable precision, especially on the Apple GPU
             # Some models can read 32k+ tokens at once. Reading that much in one go would
             # need a lot of memory, so we cap it (this mainly affects the perplexity task).
             "max_length": settings.MAX_LENGTH,

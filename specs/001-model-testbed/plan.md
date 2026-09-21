@@ -14,15 +14,15 @@ workspace folder only when a run starts and is always deleted when the run ends.
 
 Evaluation reuses the standard tool of each model family: EleutherAI lm-evaluation-harness for
 generative models, Sentence Transformers' built-in evaluators for embeddings, and the
-Transformers pipeline with scikit-learn metrics for classifiers. All run on the Apple GPU (`mps`)
-with CPU fallback. Results are appended to a JSON Lines history for later comparison. The core
+Transformers pipeline with scikit-learn metrics for classifiers. All run on the best available
+hardware: an NVIDIA GPU (`cuda`), else the Apple GPU (`mps`), else the CPU. Results are appended to a JSON Lines history for later comparison. The core
 logic is plain Python functions, so a local web page can be added later without changing it.
 
 ## Technical Context
 
 **Language/Version**: Python 3.12 (managed by `uv`)
 
-**Primary Dependencies**: PyTorch 2.11 (`mps`), transformers 5.x, sentence-transformers 6.x,
+**Primary Dependencies**: PyTorch 2.14 (`cuda` / `mps` / `cpu`), transformers 5.x, sentence-transformers 6.x,
 huggingface-hub 1.x, datasets 5.x, lm-eval[hf] 0.4.x, scikit-learn 1.x, Typer (+ Rich), PyYAML,
 Pydantic 2, filelock. See [research.md §10](./research.md#10-dependency-summary).
 
@@ -33,7 +33,8 @@ be moved with `TESTBED_WORKSPACE`.
 **Testing**: pytest (offline unit tests + `network`-marked end-to-end tests with tiny models),
 ruff for linting/formatting.
 
-**Target Platform**: macOS on Apple silicon (Mac mini, ≥16 GB memory); no CUDA.
+**Target Platform**: macOS on Apple silicon (Mac mini, ≥16 GB memory) as the main target;
+NVIDIA GPUs (CUDA) are used automatically when present but never required.
 
 **Project Type**: Single-project command-line application with a reusable core library.
 
@@ -41,7 +42,7 @@ ruff for linting/formatting.
 download (SC-004); first result for a small model < 10 min total (SC-001); catalog build < 2 min
 (SC-007); `testbed --help` and `testbed models` respond in < 1 s (heavy imports are lazy).
 
-**Constraints**: Models ≤ 2 GB download (~1B parameters), `float32` on `mps`, max context
+**Constraints**: Models ≤ 2 GB download (~1B parameters), `float32` on every device, max context
 2048 tokens for generative evaluation, batch size 1; extra disk use ≤ model + data + 10%
 (SC-003); downloads folder empty after every run (SC-002); only `*.safetensors`, never
 `trust_remote_code`.
@@ -102,7 +103,7 @@ src/testbed/
 ├── cli.py                   # Typer commands; printing only, calls the functions below
 ├── catalog.py               # CatalogEntry model (Pydantic), load/validate/find
 ├── catalog_builder.py       # search Hugging Face, apply filters, write catalog.yaml safely
-├── device.py                # choose mps or cpu, free GPU memory between evaluators
+├── device.py                # choose cuda, mps or cpu, free GPU memory between evaluators
 ├── downloads.py             # disk-space check, snapshot download, cleanup, run lock
 ├── runner.py                # one run: check → download → evaluate → save → cleanup
 ├── results.py               # append/read results.jsonl, history filters, comparison
