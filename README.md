@@ -43,15 +43,15 @@ Cleaned up 91 MB of downloads.
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
-| `uv run testbed models [--type TYPE]` | List the catalog. Nothing is downloaded. |
-| `uv run testbed evaluators [--type TYPE]` | List evaluators: what they measure and how to read the score. `*` marks the recommended one per type. |
+| Command                                                                                   | What it does                                                                                                                          |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `uv run testbed models [--type TYPE]`                                                     | List the catalog. Nothing is downloaded.                                                                                              |
+| `uv run testbed evaluators [--type TYPE]`                                                 | List evaluators: what they measure and how to read the score. `*` marks the recommended one per type.                                 |
 | `uv run testbed evaluate [MODEL] [-e EVALUATOR]... [--limit N] [--device auto\|mps\|cpu]` | Download the model, run the evaluator(s), show and save the scores, delete the model. Without `MODEL` you choose from numbered lists. |
-| `uv run testbed history [--type TYPE] [--evaluator KEY] [--model MODEL]` | Show saved results, newest first. |
-| `uv run testbed compare EVALUATOR` | Latest result of every model on one evaluator, best first. |
-| `uv run testbed catalog build [--per-type N] [--max-size-gb X] [--output PATH]` | Regenerate the catalog from Hugging Face. |
-| `uv run testbed cleanup` | Delete leftover downloads (e.g. after a crash). |
+| `uv run testbed history [--type TYPE] [--evaluator KEY] [--model MODEL]`                  | Show saved results, newest first.                                                                                                     |
+| `uv run testbed compare EVALUATOR`                                                        | Latest result of every model on one evaluator, best first.                                                                            |
+| `uv run testbed catalog build [--per-type N] [--max-size-gb X] [--output PATH]`           | Regenerate the catalog from Hugging Face.                                                                                             |
+| `uv run testbed cleanup`                                                                  | Delete leftover downloads (e.g. after a crash).                                                                                       |
 
 `TYPE` is `generative`, `embedding`, or `classification`. Add `--help` to any command for
 details.
@@ -60,10 +60,10 @@ Examples:
 
 ```bash
 # Two evaluators in one run: the model is downloaded only once.
-uv run testbed evaluate HuggingFaceTB/SmolLM2-135M -e arc-easy -e hellaswag
+uv run testbed evaluate openai-community/gpt2 -e arc-easy -e hellaswag
 
 # A quicker, rougher test with 50 instead of 200 examples.
-uv run testbed evaluate Qwen/Qwen2.5-0.5B --limit 50
+uv run testbed evaluate Qwen/Qwen3-0.6B --limit 50
 
 # Which sentiment model is best on SST-2?
 uv run testbed compare sst2
@@ -71,15 +71,15 @@ uv run testbed compare sst2
 
 ## Evaluators
 
-| Key | Model type | Main score | What it measures |
-| --- | --- | --- | --- |
-| `arc-easy` * | generative | `acc_norm` (higher is better) | Multiple-choice grade-school science questions |
-| `hellaswag` | generative | `acc_norm` (higher is better) | Common-sense: choose the most sensible ending of a short story |
-| `wikitext` | generative | `word_perplexity` (lower is better) | How well the model predicts real Wikipedia text |
-| `sts-benchmark` * | embedding | `spearman_cosine` (higher is better) | How well sentence similarities match human ratings |
-| `nano-scifact` | embedding | `ndcg@10` (higher is better) | Search: find scientific abstracts for a claim (fixed size: 50 questions) |
-| `sst2` * | classification | `accuracy` (higher is better) | Positive/negative sentiment of movie-review sentences |
-| `rotten-tomatoes` | classification | `accuracy` (higher is better) | Positive/negative sentiment of movie-review snippets |
+| Key                | Model type     | Main score                           | What it measures                                                         |
+| ------------------ | -------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| `arc-easy` \*      | generative     | `acc_norm` (higher is better)        | Multiple-choice grade-school science questions                           |
+| `hellaswag`        | generative     | `acc_norm` (higher is better)        | Common-sense: choose the most sensible ending of a short story           |
+| `wikitext`         | generative     | `word_perplexity` (lower is better)  | How well the model predicts real Wikipedia text                          |
+| `sts-benchmark` \* | embedding      | `spearman_cosine` (higher is better) | How well sentence similarities match human ratings                       |
+| `nano-scifact`     | embedding      | `ndcg@10` (higher is better)         | Search: find scientific abstracts for a claim (fixed size: 50 questions) |
+| `sst2` \*          | classification | `accuracy` (higher is better)        | Positive/negative sentiment of movie-review sentences                    |
+| `rotten-tomatoes`  | classification | `accuracy` (higher is better)        | Positive/negative sentiment of movie-review snippets                     |
 
 They use the standard tool of each model family:
 [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) for generative
@@ -92,11 +92,11 @@ leaderboard numbers.
 
 ## Where files live
 
-| Path | What it is |
-| --- | --- |
-| `catalog.yaml` | The curated model list. Edit it by hand or regenerate it. |
-| `workspace/results.jsonl` | Your results history, one result per line (JSON Lines). Kept. |
-| `workspace/downloads/` | Temporary: models, datasets, and caches of the current run. Emptied after every run. |
+| Path                      | What it is                                                                           |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `catalog.yaml`            | The curated model list. Edit it by hand or regenerate it.                            |
+| `workspace/results.jsonl` | Your results history, one result per line (JSON Lines). Kept.                        |
+| `workspace/downloads/`    | Temporary: models, datasets, and caches of the current run. Emptied after every run. |
 
 The `workspace/` folder is ignored by git. Set the environment variable `TESTBED_WORKSPACE` to
 put it somewhere else.
@@ -120,15 +120,15 @@ put it somewhere else.
 `catalog.yaml` lists the models you can choose from. Each entry looks like this:
 
 ```yaml
-  - id: distilbert/distilbert-base-uncased-finetuned-sst-2-english
-    type: classification
-    task: sentiment            # classification only
-    label_map:                 # classification only: model label -> negative/neutral/positive
-      NEGATIVE: negative
-      POSITIVE: positive
-    description: DistilBERT fine-tuned on SST-2 movie-review sentiment (67M parameters).
-    size_mb: 256
-    license: apache-2.0
+- id: distilbert/distilbert-base-uncased-finetuned-sst-2-english
+  type: classification
+  task: sentiment # classification only
+  label_map: # classification only: model label -> negative/neutral/positive
+    NEGATIVE: negative
+    POSITIVE: positive
+  description: DistilBERT fine-tuned on SST-2 movie-review sentiment (67M parameters).
+  size_mb: 256
+  license: apache-2.0
 ```
 
 - **Edit by hand**: add or remove entries. If you make a mistake, the testbed tells you which
@@ -148,7 +148,7 @@ put it somewhere else.
    `EvaluatorOutput(scores={"my_metric": 0.87}, examples=200)`. Look at the existing
    evaluators in the same file; most need only a few lines.
 3. Add an `Evaluator(key="my-eval", name=..., model_type=..., description=..., dataset=...,
-   main_metric="my_metric", higher_is_better=True, how_to_read=..., run=run_my_eval)` to the
+main_metric="my_metric", higher_is_better=True, how_to_read=..., run=run_my_eval)` to the
    list at the bottom of that file (e.g. `GENERATIVE_EVALUATORS`).
 4. Check it: `uv run pytest tests/unit/test_evaluator_registry.py`, then try it with
    `uv run testbed evaluate <model> -e my-eval --limit 10`.
