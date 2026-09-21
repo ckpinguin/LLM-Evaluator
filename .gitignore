@@ -1,0 +1,20 @@
+# Testbed workspace: temporary downloads and the local results history
+workspace/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+dist/
+*.egg-info/
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+
+# Temporary file written while saving the catalog
+*.yaml.tmp
+
+# Editors / OS
+.DS_Store
+*.swp

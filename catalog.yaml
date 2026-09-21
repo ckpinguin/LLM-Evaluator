@@ -1,0 +1,102 @@
+# Curated model catalog for the testbed.
+# Edit by hand, or regenerate with:  uv run testbed catalog build
+# Format: specs/001-model-testbed/contracts/catalog-file.md
+#
+# This list was generated on 2026-09-21 and then reviewed by hand:
+# - removed intfloat/multilingual-e5-small (expects "query:" prefixes the testbed does not add),
+#   yangheng/deberta-v3-base-absa-v1.1 (needs an extra "aspect" input), qandos0/SentimentArEng
+#   (unknown license), distilgpt2 and paraphrase-multilingual-mpnet-base-v2 (near-duplicates)
+# - added HuggingFaceTB/SmolLM2-135M, Qwen/Qwen2.5-0.5B (base model) and BAAI/bge-small-en-v1.5
+generated_at: 2026-09-21
+max_size_gb: 2.0
+models:
+  # --- generative -------------------------------------------------------------------------------
+  - id: HuggingFaceTB/SmolLM2-135M
+    type: generative
+    description: Very small modern language model (135M parameters); a good first test.
+    size_mb: 260
+    license: apache-2.0
+
+  - id: openai-community/gpt2
+    type: generative
+    description: The classic GPT-2 from 2019 (137M parameters); a useful historical baseline.
+    size_mb: 525
+    license: mit
+
+  - id: EleutherAI/pythia-160m
+    type: generative
+    description: Small research language model trained on the open Pile dataset (213M parameters).
+    size_mb: 360
+    license: apache-2.0
+
+  - id: Qwen/Qwen2.5-0.5B
+    type: generative
+    description: Small multilingual base language model (494M parameters).
+    size_mb: 953
+    license: apache-2.0
+
+  - id: Qwen/Qwen3-0.6B
+    type: generative
+    description: Recent small language model from the Qwen3 family (752M parameters).
+    size_mb: 1449
+    license: apache-2.0
+
+  # --- embedding --------------------------------------------------------------------------------
+  - id: sentence-transformers/all-MiniLM-L6-v2
+    type: embedding
+    description: Small, fast English sentence embedding model (23M parameters).
+    size_mb: 87
+    license: apache-2.0
+
+  - id: BAAI/bge-small-en-v1.5
+    type: embedding
+    description: Small English embedding model, strong at search/retrieval (33M parameters).
+    size_mb: 128
+    license: mit
+
+  - id: sentence-transformers/all-mpnet-base-v2
+    type: embedding
+    description: Larger, more accurate English sentence embedding model (109M parameters).
+    size_mb: 418
+    license: apache-2.0
+
+  - id: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+    type: embedding
+    description: Multilingual sentence embedding model for 50+ languages (118M parameters).
+    size_mb: 476
+    license: apache-2.0
+
+  # --- classification (sentiment) ---------------------------------------------------------------
+  - id: distilbert/distilbert-base-uncased-finetuned-sst-2-english
+    type: classification
+    task: sentiment
+    label_map:
+      NEGATIVE: negative
+      POSITIVE: positive
+    description: DistilBERT fine-tuned on SST-2 movie-review sentiment (67M parameters).
+    size_mb: 256
+    license: apache-2.0
+
+  - id: lxyuan/distilbert-base-multilingual-cased-sentiments-student
+    type: classification
+    task: sentiment
+    label_map:
+      negative: negative
+      neutral: neutral
+      positive: positive
+    description: Multilingual DistilBERT with negative/neutral/positive labels (135M parameters).
+    size_mb: 520
+    license: apache-2.0
+
+  - id: tabularisai/multilingual-sentiment-analysis
+    type: classification
+    task: sentiment
+    label_map:
+      Very Negative: negative
+      Negative: negative
+      Neutral: neutral
+      Positive: positive
+      Very Positive: positive
+    description: Multilingual sentiment model with five levels, very negative to very positive (135M).
+    size_mb: 520
+    license: cc-by-nc-4.0

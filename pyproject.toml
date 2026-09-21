@@ -1,0 +1,49 @@
+[project]
+name = "testbed"
+version = "0.1.0"
+description = "A small testbed for trying out Hugging Face text models on an Apple silicon Mac."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+# Each dependency is the standard tool for its job (see specs/001-model-testbed/research.md).
+# Lower bounds = versions tested; upper bounds = next major version. uv.lock pins exact versions.
+dependencies = [
+    "torch>=2.14,<3",                     # runs the models (Apple GPU via "mps")
+    "transformers>=5.17,<6",              # loads generative and classification models
+    "sentence-transformers>=6.1,<7",      # loads and evaluates embedding models
+    "huggingface-hub>=1.32,<2",           # searches and downloads models
+    "datasets>=5.0.1,<6",                 # downloads evaluation datasets
+    "lm-eval[hf]>=0.4.13,<0.5",           # standard benchmarks for generative models
+    "scikit-learn>=1.9.1,<2",             # accuracy / F1 metrics
+    "typer>=0.27.2,<0.28",                # command-line interface (includes Rich)
+    "pyyaml>=6.0.3,<7",                   # reads and writes catalog.yaml
+    "pydantic>=2.13.5,<3",                # validates catalog entries and results
+    "filelock>=3.32.7,<4",                # makes sure only one run happens at a time
+]
+
+[project.scripts]
+testbed = "testbed.cli:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1,<10",
+    "ruff>=0.16.8,<0.17",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.28,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["network: needs internet and downloads small models"]
+# Network tests are skipped by default; run them with:  uv run pytest -m network
+addopts = "-m 'not network'"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# Only check our own code, not the Spec Kit documents and tooling.
+extend-exclude = ["specs", ".specify", ".claude"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
